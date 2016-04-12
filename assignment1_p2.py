@@ -1,1 +1,1 @@
-__author__ = 'asauceda@ucsd.edu,A10482838,jamesputyouremailhere@ucsd.edu,andIDNumber'
+__author__ = 'asauceda@ucsd.edu,A10482838,jgl021@ucsd.edu,A11380076'
