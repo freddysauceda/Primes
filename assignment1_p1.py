@@ -1,9 +1,10 @@
 import sys
+from sets import Set
 
 __author__ = 'asauceda@ucsd.edu,A10482838,jgl021@ucsd.edu,A11380076'
 
-# Dict to keep track of seen primes
-seen = {}
+# List to keep track of seen primes
+seen = Set()
 
 def checkPrime(numToCheck):
   # Function checks if a number is a prime
@@ -40,6 +41,7 @@ def getPossibleActions(currentPrime):
 
         if(firstRun!=True):
             primeStringIndex += 1
+            firstRun = False
 
         # save digit to check later
         save_i = int(digit)
@@ -73,15 +75,34 @@ def getPossibleActions(currentPrime):
 
 def getPath(startingPrime,finalPrime):
     # check if the number of digits are the same, can't find a path if they're not
+    # remember that this is illegal and fix it
     if(len(str(startingPrime)) != len(str(finalPrime))):
         return "UNSOLVABLE"
-
     global seen
+
+    # Create the queue for bfs
+    q = Queue()
+    # Insert the first prime to search from
+    q.put(startingPrime)
+
+    while (q.empty() == False):
+        # For each adjacent prime do the bfs stuff
+        q_front = q.get()
+        # Once we reach finalPrime we end
+        if(q_front == finalPrime):
+            return path
+
+        # For each adjacent neighbor
+        for neighbor in getPossibleActions(q_front):
+            # If this not hasn't been seen
+            if neighbor not in seen:
+                q.add(neighbor)
+
     return path
 
 def main():
 
-    print(getPossibleActions(11))
+    print(getPossibleActions(111))
 
     #primes = str(sys.stdin.readline()).split()
     #print(getPath(primes[0],primes[1]))
