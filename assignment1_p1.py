@@ -1,5 +1,6 @@
 import sys
 from sets import Set
+import Queue
 
 __author__ = 'asauceda@ucsd.edu,A10482838,jgl021@ucsd.edu,A11380076'
 
@@ -33,15 +34,10 @@ def getPossibleActions(currentPrime):
 
     # Some dumb logic because I don't know how to start something at 0
     # in python in a for loop
-    firstRun = True
     primeStringIndex = 0
 
     # Loop through primeString to find reachable primes
     for digit in primeString:
-
-        if(firstRun!=True):
-            primeStringIndex += 1
-            firstRun = False
 
         # save digit to check later
         save_i = int(digit)
@@ -71,41 +67,61 @@ def getPossibleActions(currentPrime):
             # Increment digit correctly
             digit_i = (digit_i+1)%10
 
+        # Increment primeStringIndex to change the right digit
+        primeStringIndex += 1
+
     return listOfPrimes
 
 def getPath(startingPrime,finalPrime):
-    # check if the number of digits are the same, can't find a path if they're not
-    # remember that this is illegal and fix it
-    if(len(str(startingPrime)) != len(str(finalPrime))):
-        return "UNSOLVABLE"
     global seen
 
+    # Dict to keep track of parent
+    # key : val = node : parent
+    parent = {}
+    path = []
+
     # Create the queue for bfs
-    q = Queue()
+    q = Queue.Queue()
     # Insert the first prime to search from
     q.put(startingPrime)
+    seen.add(int(startingPrime))
+    parent[int(startingPrime)] = None
 
     while (q.empty() == False):
         # For each adjacent prime do the bfs stuff
         q_front = q.get()
-        # Once we reach finalPrime we end
-        if(q_front == finalPrime):
-            return path
 
         # For each adjacent neighbor
         for neighbor in getPossibleActions(q_front):
             # If this not hasn't been seen
-            if neighbor not in seen:
-                q.add(neighbor)
+            if int(neighbor) not in seen:
+                q.put(neighbor)
+                seen.add(neighbor)
+                parent[int(neighbor)] = int(q_front)
 
-    return path
+    # If the finalPrime isn't in the parent dict then it's unsolvable
+    # Can't use print to print because python likes to add stupid newlines at the end of things
+    if int(finalPrime) not in parent:
+        sys.stdout.write("UNSOLVABLE")
+        return
+    else:
+    # Assign lookUp to finalPrime, loop backwards until we reach the root which
+    # has to be the startingPrime
+        lookUp = finalPrime
+        while(parent[lookUp] is not None):
+            path.insert(0, lookUp)
+            lookUp = parent[lookUp]
+        path.insert(0, lookUp)
+
+    # Print the final list to stdout
+    sys.stdout.write(" ".join(repr(e) for e in path))
+    return
+
 
 def main():
 
-    print(getPossibleActions(111))
-
-    #primes = str(sys.stdin.readline()).split()
-    #print(getPath(primes[0],primes[1]))
+    primes = str(sys.stdin.readline()).split()
+    getPath(int(primes[0]), int(primes[1]))
 
 if __name__ == '__main__':
     main()
