@@ -76,21 +76,51 @@ def getPath(startingPrime,finalPrime):
     global seen
 
     # Dict to keep track of parent
-    # key : val = node : parent
-    parent = {}
+    # key : val = node : (parent,nodeDepth)
+    info = {}
+
     path = []
 
     # Depth limit is 5
     limit = 5
-    currDepth = 0
+    currDepth = -1
 
     # create a stack (which is a list where you only append and pop)
     stack = [startingPrime]
+    seen.add(int(startingPrime))
+    info[int(startingPrime)] = (None,0)
 
+    #While the stack isn't empty, keep trying to find the path
+    while stack:
+        #Retrive the last element from the stack
+        s_front = stack.pop()
+        if (info[int(s_front)])[1] > limit:
+            continue
+        currDepth = (info[int(s_front)])[1]
+        for neighbor in getPossibleActions(s_front):
+            if int(neighbor) not in seen:
+                stack.append(neighbor)
+                seen.add(int(neighbor))
+                info[int(neighbor)] = (int(s_front),currDepth+1)
 
-    # While the stack is not empty
-    while (len(stack) != 0):
-        # do stuff I give up
+    # Loop through the dictionary to find if it contains the final prime
+    values = info.values()
+    for pair in values:
+        if pair[0] == int(finalPrime):
+            # On successful find, gets the path and outputs the path stdout
+            lookUp = int(finalPrime)
+            while((info[lookUp])[0] is not None):
+                path.insert(0, lookUp)
+                lookUp = (info[lookUp])[0]
+            path.insert(0, lookUp)
+    
+            # Print the final list to stdout
+            sys.stdout.write(" ".join(repr(e) for e in path))
+            return
+
+    # If the finalPrime isn't in the parent dict then it's unsolvable
+    # Can't use print to print because python likes to add stupid newlines at the end of things
+    sys.stdout.write("UNSOLVABLE")
 
 def main():
 
