@@ -137,8 +137,11 @@ def getPath(startingPrime,finalPrime):
 
 def main():
 
-    primes = str(sys.stdin.readline()).split()
-    getPath(int(primes[0]), int(primes[1]))
+    for line in sys.stdin.readlines():
+        primes = str(line).split()
+        getPath(int(primes[0]), int(primes[1]))
+        print ""
+
 
 if __name__ == '__main__':
     main()
