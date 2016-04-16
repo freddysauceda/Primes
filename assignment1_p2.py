@@ -78,7 +78,6 @@ def getPath(startingPrime,finalPrime):
     # Dict to keep track of parent
     # key : val = node : (parent,nodeDepth)
     info = {}
-
     path = []
 
     # Depth limit is 5
@@ -123,9 +122,12 @@ def getPath(startingPrime,finalPrime):
     sys.stdout.write("UNSOLVABLE")
 
 def main():
-
-    primes = str(sys.stdin.readline()).split()
-    getPath(int(primes[0]), int(primes[1]))
+    global seen
+    for line in sys.stdin.readlines():
+        primes = str(line).split()
+        getPath(int(primes[0]), int(primes[1]))
+        seen = Set()
+        print ""
 
 if __name__ == '__main__':
     main()
