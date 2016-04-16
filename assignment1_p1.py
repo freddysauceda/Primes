@@ -87,6 +87,8 @@ def getPath(startingPrime,finalPrime):
     seen.add(int(startingPrime))
     parent[int(startingPrime)] = None
 
+    flag = False
+
     while (q.empty() == False):
         # For each adjacent prime do the bfs stuff
         q_front = q.get()
@@ -98,6 +100,13 @@ def getPath(startingPrime,finalPrime):
                 q.put(neighbor)
                 seen.add(neighbor)
                 parent[int(neighbor)] = int(q_front)
+
+                if(neighbor == finalPrime):
+                    flag = True
+                    break
+
+        if flag:
+            break
 
     # If the finalPrime isn't in the parent dict then it's unsolvable
     # Can't use print to print because python likes to add stupid newlines at the end of things

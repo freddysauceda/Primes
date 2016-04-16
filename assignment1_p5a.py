@@ -107,7 +107,6 @@ def getPath(startingPrime,finalPrime):
     # Algorithm
     while not queue.empty():
         current = queue.get()
-        first = False
 
         if current == finalPrime:
             break
